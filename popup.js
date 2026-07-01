@@ -61,6 +61,9 @@ function buildProfilesBar(ids) {
         <button class="profile-tab-delete" data-action="delete-profile" data-id="${id}" title="Delete profile">×</button>
       </div>`;
   }
+  if (ids.length > 0) {
+    html += `<button class="btn-copy-profile" data-action="copy-profile">Copy Profile</button>`;
+  }
   html += `<button class="btn-add-profile" data-action="add-profile">+ Profile</button>`;
   html += `</div>`;
   return html;
@@ -214,6 +217,29 @@ function handleClick(e) {
     save();
     render();
     setTimeout(() => document.querySelector('[data-field="name"]')?.focus(), 0);
+    return;
+  }
+
+  if (action === 'copy-profile') {
+    const sourceId = activeId && profiles[activeId] ? activeId : Object.keys(profiles)[0];
+    const source = sourceId ? profiles[sourceId] : null;
+    if (!source) return;
+
+    const newId = uid();
+    profiles[newId] = {
+      name: source.name ? `${source.name} Copy` : '',
+      domain: source.domain || '',
+      enabled: source.enabled !== false,
+      headers: (source.headers || []).map(h => ({
+        id: uid(),
+        name: h.name || '',
+        value: h.value || ''
+      }))
+    };
+
+    activeId = newId;
+    save();
+    render();
     return;
   }
 
