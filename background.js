@@ -8,7 +8,20 @@ async function rebuildRules() {
   let ruleId = 1;
 
   for (const profile of Object.values(profiles)) {
-    if (!profile.enabled || !profile.domain || !profile.domain.trim()) continue;
+    if (!profile.enabled) continue;
+
+    // Current format: `domains: [{ host, enabled }]` — unchecked entries are skipped.
+    // Older formats: `domains` as plain strings, or a single `domain` string.
+    const rawDomains = Array.isArray(profile.domains)
+      ? profile.domains
+      : String(profile.domain ?? '').split(/[\s,]+/);
+    const domains = [...new Set(
+      rawDomains
+        .filter(d => typeof d === 'string' || d?.enabled !== false)
+        .map(d => String(typeof d === 'string' ? d : d?.host ?? '').trim().toLowerCase())
+        .filter(Boolean)
+    )];
+    if (domains.length === 0) continue;
 
     const validHeaders = (profile.headers || []).filter(
       h => h.name && h.name.trim() && h.value !== undefined && h.value !== null
@@ -27,7 +40,7 @@ async function rebuildRules() {
         }))
       },
       condition: {
-        requestDomains: [profile.domain.toLowerCase().trim()],
+        requestDomains: domains,
         resourceTypes: [
           'main_frame', 'sub_frame', 'stylesheet', 'script', 'image',
           'font', 'object', 'xmlhttprequest', 'ping', 'media', 'websocket', 'other'

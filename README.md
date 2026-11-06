@@ -4,7 +4,7 @@ A Chrome extension that injects custom request headers for configured domains.
 
 ## What it does
 
-Configure profiles — each tied to a single domain — with any number of header/value pairs. Every outgoing HTTP request to that domain will carry those headers, transparently, before leaving the machine. Useful for passing auth tokens, feature flags, or environment overrides to internal APIs without touching application code.
+Configure profiles — each tied to one or more domains — with any number of header/value pairs. Every outgoing HTTP request to those domains will carry those headers, transparently, before leaving the machine. Useful for passing auth tokens, feature flags, or environment overrides to internal APIs without touching application code.
 
 ## Installation
 
@@ -18,8 +18,10 @@ This extension is not published to the Chrome Web Store. Load it manually:
 
 Click the extension icon to open the popup.
 
-- **New Profile** — create a profile for a domain (e.g. `api.myapp.internal`)
-- **Domain** — exact host to match; subdomains are included (e.g. `myapp.internal` also matches `api.myapp.internal`)
+- **New Profile** — create a profile for one or more domains (e.g. `api.myapp.internal`)
+- **Add Domain** — add a host to match; subdomains are included (e.g. `myapp.internal` also matches `api.myapp.internal`)
+- **Add *current site*** — one click adds the active tab's host to the profile (hidden on non-web pages, disabled if already added)
+- **Domain checkbox** — uncheck a domain to stop sending the profile's headers to it without removing it; **×** deletes it
 - **Toggle** — enable or disable a profile without deleting it
 - **Add Header** — add a `Header-Name: value` pair to inject
 - Changes are saved immediately; rules take effect on the next request

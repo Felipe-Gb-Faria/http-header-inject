@@ -205,7 +205,33 @@ body {
 .field-input:focus { border-color: var(--accent); }
 .field-input::placeholder { color: var(--text-dim); }
 
-.field-input.domain { font-family: var(--mono); font-size: 12px; }
+/* Domains */
+.domains-section {
+  padding: 12px 16px 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.domain-check {
+  width: 14px;
+  height: 14px;
+  margin: 0 3px 0 1px;
+  flex-shrink: 0;
+  cursor: pointer;
+  accent-color: var(--accent);
+}
+
+.header-input.domain { flex: 1; }
+
+.domain-actions { display: flex; flex-wrap: wrap; gap: 6px; }
+.domain-actions .btn-add-header {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.btn-add-header:disabled { opacity: 0.5; cursor: default; }
+.btn-add-header:disabled:hover { color: var(--text-dim); border-color: var(--border); }
+.header-row.row-off .header-input.domain { opacity: 0.5; text-decoration: line-through; }
 
 /* Toggle */
 .toggle {
